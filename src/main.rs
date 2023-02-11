@@ -9,9 +9,7 @@ fn main() {
 
     match minigrep::run(params) {
         Ok(result) => {
-            for line in result {
-                println!("{line}")
-            }
+            println!("{}", result.join("\n"))
         }
         Err(error) => {
             eprintln!("{error}");
