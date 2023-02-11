@@ -1,15 +1,22 @@
 use std::process;
 
 fn main() {
-    let args = minigrep::get_args().unwrap_or_else(|err| {
+    let params = minigrep::get_args().unwrap_or_else(|err| {
         eprintln!("Error while parsing arguments: {err}");
 
         process::exit(1)
     });
 
-    if let Err(e) = minigrep::grep(args) {
-        eprintln!("Application error {e}");
+    match minigrep::run(params) {
+        Ok(result) => {
+            for line in result {
+                println!("{line}")
+            }
+        }
+        Err(error) => {
+            eprintln!("{error}");
 
-        process::exit(1)
+            process::exit(1)
+        }
     }
 }

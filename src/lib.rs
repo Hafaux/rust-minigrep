@@ -20,22 +20,65 @@ impl Params {
     }
 }
 
-pub fn grep(params: Params) -> Result<(), Box<dyn Error>> {
-    let match_line = |line: &&str| line.to_lowercase().contains(params.query.as_str());
+pub fn find_string(contents: String, query: String) -> Result<Vec<String>, Box<dyn Error>> {
+    let result = contents
+        .lines()
+        .filter(|line: &&str| line.to_lowercase().contains(query.as_str()))
+        .map(|str| str.to_owned())
+        .collect();
 
-    let matching_lines = fs::read_to_string(params.path)?
-        .split("\n")
-        .filter(match_line)
-        .collect::<Vec<&str>>()
-        .join("\n");
+    Ok(result)
+}
 
-    print!("\n{}", matching_lines);
+pub fn run(params: Params) -> Result<Vec<String>, Box<dyn Error>> {
+    let contents = fs::read_to_string(params.path)?;
+    let matching_lines = find_string(contents, params.query)?;
 
-    Ok(())
+    Ok(matching_lines)
 }
 
 pub fn get_args() -> Result<Params, &'static str> {
     let args: Vec<String> = env::args().collect();
 
     Params::build(&args)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn result_one() {
+        let query = String::from("frog");
+        let contents = String::from(
+            "\
+How dreary to be somebody!
+How public, like a frog
+To tell your name the livelong day
+To an admiring bog!",
+        );
+
+        let result = find_string(contents, query).unwrap();
+
+        assert_eq!(vec!["How public, like a frog",], result);
+    }
+
+    #[test]
+    fn result_two() {
+        let query = String::from("body");
+        let contents = String::from(
+            "\
+I'm nobody! Who are you?
+Are you nobody, too?
+Then there's a pair of us - don't tell!
+They'd banish us, you know.",
+        );
+
+        let result = find_string(contents, query).unwrap();
+
+        assert_eq!(
+            vec!["I'm nobody! Who are you?", "Are you nobody, too?"],
+            result
+        );
+    }
 }
