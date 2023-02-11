@@ -1,3 +1,5 @@
+mod tests;
+
 use std::process;
 
 fn main() {
