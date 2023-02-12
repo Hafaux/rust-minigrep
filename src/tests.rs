@@ -4,14 +4,12 @@ mod tests {
 
     #[test]
     fn search_one() {
-        let query = String::from("frog");
-        let contents = String::from(
-            "\
+        let query = "frog";
+        let contents = "\
 How dreary to be somebody!
 How public, like a Frog
 To tell your name the livelong day
-To an admiring bog!",
-        );
+To an admiring bog!";
 
         let result = find_string(contents, query, true).unwrap();
 
@@ -20,14 +18,12 @@ To an admiring bog!",
 
     #[test]
     fn search_two() {
-        let query = String::from("body");
-        let contents = String::from(
-            "\
+        let query = "body";
+        let contents = "\
 I'm nobody! Who are you?
 Are you nobody, too?
 Then there's a pair of us - don't tell!
-They'd banish us, you know.",
-        );
+They'd banish us, you know.";
 
         let result = find_string(contents, query, false).unwrap();
 
@@ -39,14 +35,12 @@ They'd banish us, you know.",
 
     #[test]
     fn search_insensitive() {
-        let query = String::from("FrOG");
-        let contents = String::from(
-            "\
+        let query = "FrOG";
+        let contents = "\
 How dreary to be somebody!
 How public, like a frog
 To tell your name the livelong day
-To an admiring bog!",
-        );
+To an admiring bog!";
 
         let result = find_string(contents, query, true).unwrap();
 
@@ -55,14 +49,12 @@ To an admiring bog!",
 
     #[test]
     fn search_sensitive() {
-        let query = String::from("to");
-        let contents = String::from(
-            "\
+        let query = "to";
+        let contents = "\
 How dreary to be somebody!
 How public, like a frog
 To tell your name the livelong day
-To an admiring bog!",
-        );
+To an admiring bog!";
 
         let result = find_string(contents, query, false).unwrap();
 
